@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const app = express();
 const connectdb = require("./config/database");
@@ -28,8 +30,9 @@ connectdb()
 
     try {
       await User.init(); // ensure unique indexes
-      app.listen(3000, () =>
-        console.log("Server is successfully running on port 3000")
+      const PORT = process.env.PORT || 3000;
+      app.listen(PORT, () =>
+        console.log(`Server is successfully running on port ${PORT}`)
       );
     } catch (err) {
       console.error("Error initializing User model:", err.message);
@@ -38,4 +41,5 @@ connectdb()
   })
   .catch((err) => {
     console.error("Database cannot be connected:", err.message);
+    process.exit(1); // Exit if database connection fails
   });
